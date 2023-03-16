@@ -11,7 +11,7 @@ def from_pandera(
     fields = []
 
     for column in pandera_schema.columns:
-        match str.lower(pandera_schema.columns[column].dtype):
+        match str.lower(pandera_schema.columns[column].dtype.type.name):
             case "int64":
                 SchemaClass = model.Int64Schema
             case "float64":
@@ -20,6 +20,22 @@ def from_pandera(
                 SchemaClass = model.BooleanSchema
             case "str":
                 SchemaClass = model.StringSchema
+            case "datetime64":
+                SchemaClass = model.TimestampSchema
+            case "datetime64[ns]":
+                SchemaClass = model.TimestampSchema
+            case "int32":
+                SchemaClass = model.Int32Schema
+            case "float32":
+                SchemaClass = model.Float32Schema
+            case "int16":
+                SchemaClass = model.Int16Schema
+            case "int8":
+                SchemaClass = model.Int8Schema
+            case "object":
+                SchemaClass = model.StringSchema
+            case "timedelta64[ns]":
+                SchemaClass = model.TimeSchema
             case _:
                 raise ValueError(
                     "Can't convert to Recap type from Pandera "
